@@ -5,19 +5,89 @@ import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
+import { useDispatch } from "react-redux";
+import {setFilters} from "../logSlice";
 
 export default function CheckboxLabels() {
   const [levels, setLevels] = useState([]);
+  console.log("level: ", levels);
   const [components, setComponents] = useState([]);
+  console.log("component: ", components);
   const [hosts, setHosts] = useState([]);
+  console.log("host: ", hosts);
   const [requestId, setRequestId] = useState("");
+  console.log("requestId: ", requestId);
   const [timeStamp, setTimeStamp] = useState("");
+  console.log("timestamp: ", timeStamp);
+  // const [page, setPage] = useState(0);
+  // const [pageSize, setPageSize] = useState(100);
+  // const [loading, setLoading] = useState(false);
+
+  const filter = {
+    level: levels,
+    component: components,
+    host: hosts,
+     requestId:requestId,
+timestamp: timeStamp,
+
+  }
+  const dispatch=useDispatch()
+
+
+
 
   const handleCheckbox = (value, list, setList) => {
     setList(
       list.includes(value) ? list.filter((v) => v !== value) : [...list, value]
     );
   };
+
+//   const fetchFilterPage = () => {
+//     setLoading(true);
+//     // console.log("Sending to API:", page, pageSize);
+//     // const page = 0
+//     // const pageSize = 100
+
+//     axios
+//       .post("http://localhost:8080/api/logs", 
+//         {
+//           level: levels,
+//           component: components,
+//           host: hosts,
+//           requestId:requestId,
+//           timestamp: timeStamp
+//         },{
+//           params: {page,pageSize}
+//         })
+//       .then((res) => {
+//         console.log("filter side response: ", res);
+        
+//         const data = res.data.entries.map((e, index) => ({
+//           id: page * pageSize + index + 1,
+//           timestamp: e.TimeStamp,
+//           level: e.Level?.Level,
+//           component: e.Component?.Component,
+//           host: e.Host?.Host,
+//           requestid: e.RequestId,
+//           message: e.Message,
+//         }));
+//         console.log("filter side rows: ", data);
+        
+//         // setRows(data);
+//         dispatch(setLogs(data));
+//         dispatch(setTotal(res.data.count));
+//         dispatch(setFilters({
+//   levels,
+//   components,
+//   hosts,
+//   requestId,
+//   timeStamp
+// }));
+//         dispatch(setIsFiltered(true));
+//       }).catch((err) => console.log(err))
+//       .finally(() => setLoading(false));
+//   };
+
 
   return (
     <>
@@ -113,7 +183,7 @@ export default function CheckboxLabels() {
             </div>
 
             <div className="flex justify-center">
-              <button className="bg-red-600 text-white px-5 py-2 rounded-md shadow">
+              <button className="bg-red-600 text-white px-5 py-2 rounded-md shadow" onClick={() => dispatch(setFilters(filter))}>
                 Search
               </button>
             </div>
