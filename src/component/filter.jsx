@@ -7,6 +7,10 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useDispatch } from "react-redux";
 import {setFilters} from "../logSlice";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 export default function CheckboxLabels() {
   const [levels, setLevels] = useState([]);
@@ -17,8 +21,10 @@ export default function CheckboxLabels() {
   console.log("host: ", hosts);
   const [requestId, setRequestId] = useState("");
   console.log("requestId: ", requestId);
-  const [timeStamp, setTimeStamp] = useState("");
-  console.log("timestamp: ", timeStamp);
+  const [startTime, setStartTime] = useState(null);
+  console.log("startTime: ", startTime);
+  const [endTime, setEndTime] = useState(null);
+  console.log("endTime: ", endTime);
   // const [page, setPage] = useState(0);
   // const [pageSize, setPageSize] = useState(100);
   // const [loading, setLoading] = useState(false);
@@ -27,15 +33,17 @@ export default function CheckboxLabels() {
     level: levels,
     component: components,
     host: hosts,
-     requestId:requestId,
-timestamp: timeStamp,
+    requestId:requestId,
+     startTime: startTime
+      ? dayjs(startTime).format("YYYY-MM-DD HH:mm:ss")
+      : null,
+    endTime: endTime ? dayjs(endTime).format("YYYY-MM-DD HH:mm:ss") : null,
+  };
+  console.log("filter: ", filter);
 
-  }
   const dispatch=useDispatch()
 
-
-
-
+  
   const handleCheckbox = (value, list, setList) => {
     setList(
       list.includes(value) ? list.filter((v) => v !== value) : [...list, value]
@@ -170,7 +178,7 @@ timestamp: timeStamp,
               />
             </div>
 
-            <div>
+            {/* <div>
               <label className="font-semibold">Timestamp:</label>
               <TextField
                 fullWidth
@@ -180,8 +188,23 @@ timestamp: timeStamp,
                 value={timeStamp}
                 onChange={(e) => setTimeStamp(e.target.value)}
               />
-            </div>
+            </div> */}
 
+            {/* Date Range */}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                label="Start Time"
+                value={startTime}
+                ampm={false}
+                onChange={(newValue) => setStartTime(newValue)}
+              />
+              <DateTimePicker
+                label="End Time"
+                ampm={false}
+                value={endTime}
+                onChange={(newValue) => setEndTime(newValue)}
+              />
+            </LocalizationProvider>
             <div className="flex justify-center">
               <button className="bg-red-600 text-white px-5 py-2 rounded-md shadow" onClick={() => dispatch(setFilters(filter))}>
                 Search
