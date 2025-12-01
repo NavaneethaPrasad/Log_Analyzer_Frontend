@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLogs,setTotal } from "../logSlice";
 
 export default function DataTable() {
-  // const [rows, setRows] = useState([]);
   const dispatch=useDispatch()
   const rows = useSelector((state)=>state?.logBag?.logs)
   const total = useSelector(state => state.logBag.total);
@@ -43,7 +42,6 @@ export default function DataTable() {
         }));
         console.log("rows: ", data);
         
-        // setRows(data);
         dispatch(setLogs(data))
         dispatch(setTotal(res.data.count));
       })
@@ -53,42 +51,81 @@ export default function DataTable() {
  
 
   return (
-    <div
-      style={{
-        height: "600px",
-        width: "100%",
-        overflow: "auto",
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        rowCount={total}
-        loading={loading}
-        paginationMode="server"
-        paginationModel={{ page, pageSize }}
-        onPaginationModelChange={(model) => {
-    setPage(model.page);
-    setPageSize(model.pageSize);
+  <div
+    style={{
+      height: "600px",
+      width: "100%",
+    }}
+    className="p-4"
+  >
+    <DataGrid
+      rows={rows}
+      rowCount={total}
+      loading={loading}
+      paginationMode="server"
+      paginationModel={{ page, pageSize }}
+      onPaginationModelChange={(model) => {
+        setPage(model.page);
+        setPageSize(model.pageSize);
 
-    if (isFiltered) {
-      // fetch filtered page
-      fetchFilterPage(model.page, model.pageSize);
-    } else {
-      // fetch normal page
-      fetchPage();
-    }
-  }}
-        pageSizeOptions={[10, 20, 50, 100]}
-        columns={[
-          { field: "id", headerName: "SL No.", width: 80 },
-          { field: "timestamp", headerName: "Timestamp", width: 180 },
-          { field: "level", headerName: "Level", width: 120 },
-          { field: "component", headerName: "Component", width: 150 },
-          { field: "host", headerName: "Host", width: 150 },
-          { field: "requestid", headerName: "Request ID", width: 150 },
-          { field: "message", headerName: "Message", width: 300 },
-        ]}
-      />
-    </div>
-  );
+        if (isFiltered) {
+          fetchFilterPage(model.page, model.pageSize);
+        } else {
+          fetchPage();
+        }
+      }}
+      pageSizeOptions={[10, 20, 50, 100]}
+      columns={[
+        { field: "id", headerName: "SL No.", width: 80 },
+        { field: "timestamp", headerName: "Timestamp", width: 180 },
+        { field: "level", headerName: "Level", width: 120 },
+        { field: "component", headerName: "Component", width: 150 },
+        { field: "host", headerName: "Host", width: 150 },
+        { field: "requestid", headerName: "Request ID", width: 150 },
+        { field: "message", headerName: "Message", width: 300 },
+      ]}
+      sx={{
+        borderRadius: "16px",
+        border: "1px solid #e5e7eb", 
+        backgroundColor: "white",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+
+        "& .MuiDataGrid-columnHeaders": {
+          backgroundColor: "#f8fafc", 
+          color: "#1e293b",
+          fontSize: "15px",
+          fontWeight: 600,
+          borderBottom: "1px solid #e2e8f0",
+        },
+
+        "& .MuiDataGrid-cell": {
+          fontSize: "14px",
+          color: "#334155",
+        },
+
+        "& .MuiDataGrid-row:hover": {
+          backgroundColor: "#f1f5f9",
+        },
+
+        "& .MuiDataGrid-row:nth-of-type(even)": {
+          backgroundColor: "#f9fafb", 
+        },
+
+        "& .MuiDataGrid-footerContainer": {
+          backgroundColor: "#f8fafc",
+          borderTop: "1px solid #e2e8f0",
+        },
+
+        "& .MuiDataGrid-selectedRowCount": {
+          display: "none",
+        },
+
+        "& .MuiDataGrid-virtualScroller": {
+          backgroundColor: "white",
+        },
+      }}
+    />
+  </div>
+);
+
 }

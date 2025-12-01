@@ -25,9 +25,6 @@ export default function CheckboxLabels() {
   console.log("startTime: ", startTime);
   const [endTime, setEndTime] = useState(null);
   console.log("endTime: ", endTime);
-  // const [page, setPage] = useState(0);
-  // const [pageSize, setPageSize] = useState(100);
-  // const [loading, setLoading] = useState(false);
 
   const filter = {
     level: levels,
@@ -50,169 +47,151 @@ export default function CheckboxLabels() {
     );
   };
 
-//   const fetchFilterPage = () => {
-//     setLoading(true);
-//     // console.log("Sending to API:", page, pageSize);
-//     // const page = 0
-//     // const pageSize = 100
+const Pill = ({ label, isActive, onClick }) => {
+  // COLOR MAPPING
+  const colors = {
+    INFO: "bg-blue-500 text-white",
+    WARN: "bg-orange-500 text-white",
+    ERROR: "bg-red-600 text-white",
+    DEBUG: "bg-gray-500 text-white",
 
-//     axios
-//       .post("http://localhost:8080/api/logs", 
-//         {
-//           level: levels,
-//           component: components,
-//           host: hosts,
-//           requestId:requestId,
-//           timestamp: timeStamp
-//         },{
-//           params: {page,pageSize}
-//         })
-//       .then((res) => {
-//         console.log("filter side response: ", res);
-        
-//         const data = res.data.entries.map((e, index) => ({
-//           id: page * pageSize + index + 1,
-//           timestamp: e.TimeStamp,
-//           level: e.Level?.Level,
-//           component: e.Component?.Component,
-//           host: e.Host?.Host,
-//           requestid: e.RequestId,
-//           message: e.Message,
-//         }));
-//         console.log("filter side rows: ", data);
-        
-//         // setRows(data);
-//         dispatch(setLogs(data));
-//         dispatch(setTotal(res.data.count));
-//         dispatch(setFilters({
-//   levels,
-//   components,
-//   hosts,
-//   requestId,
-//   timeStamp
-// }));
-//         dispatch(setIsFiltered(true));
-//       }).catch((err) => console.log(err))
-//       .finally(() => setLoading(false));
-//   };
+    "api-server": "bg-indigo-500 text-white",
+    database: "bg-emerald-600 text-white",
+    cache: "bg-yellow-600 text-white",
+    worker: "bg-teal-600 text-white",
+    auth: "bg-pink-600 text-white",
 
+    web01: "bg-sky-600 text-white",
+    web02: "bg-blue-700 text-white",
+    cache01: "bg-yellow-700 text-white",
+    worker01: "bg-green-700 text-white",
+    db01: "bg-purple-700 text-white"
+  };
+
+  const activeColor = colors[label] || "bg-gray-400 text-white";
 
   return (
-    <>
-      <CssBaseline />
-      <Container maxWidth="md" className="mt-10">
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-xl border">
+    <div
+      className={`px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition 
+      border border-gray-300
+      ${isActive ? activeColor : "bg-white text-gray-700"}`}
+      onClick={onClick}
+    >
+      {label}
+    </div>
+  );
+};
 
-          <FormGroup className="space-y-5">
-            <div>
-              <label className="font-semibold">Level:</label>
-              <div className="flex gap-4 items-center mt-2">
-                {["INFO", "WARN", "ERROR", "DEBUG"].map((lvl) => (
-                  <FormControlLabel
-                    key={lvl}
-                    control={
-                      <Checkbox
-                        checked={levels.includes(lvl)}
-                        onChange={() =>
-                          handleCheckbox(lvl, levels, setLevels)
-                        }
+  return (
+  <>
+    <CssBaseline />
+    <Container maxWidth="md" className="mt-10">
+      <div className="max-w-2xl mx-auto p-8 bg-white shadow-md rounded-xl border">
+
+        <FormGroup className="space-y-8">
+                {/* LEVEL */}
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <label className="font-semibold text-lg mb-2 block">Level</label>
+
+                  <div className="grid grid-cols-4 gap-2">
+                    {["INFO", "WARN", "ERROR", "DEBUG"].map((lvl) => (
+                      <Pill
+                        key={lvl}
+                        label={lvl}
+                        isActive={levels.includes(lvl)}
+                        onClick={() => handleCheckbox(lvl, levels, setLevels)}
                       />
-                    }
-                    label={lvl}
-                  />
-                ))}
-              </div>
-            </div>
+                    ))}
+                  </div>
+                </div>
 
-            <div>
-              <label className="font-semibold">Component:</label>
-              <div className="flex gap-4 items-center mt-2">
-                {["api-server", "database", "cache", "worker", "auth"].map(
-                  (cmp) => (
-                    <FormControlLabel
+
+
+              {/* COMPONENT */}
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <label className="font-semibold text-lg mb-2 block">Component</label>
+
+                <div className="grid grid-cols-4 gap-2">
+                  {["api-server", "database", "cache", "worker", "auth"].map((cmp) => (
+                    <Pill
                       key={cmp}
-                      control={
-                        <Checkbox
-                          checked={components.includes(cmp)}
-                          onChange={() =>
-                            handleCheckbox(cmp, components, setComponents)
-                          }
-                        />
-                      }
                       label={cmp}
+                      isActive={components.includes(cmp)}
+                      onClick={() => handleCheckbox(cmp, components, setComponents)}
                     />
-                  )
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label className="font-semibold">Host:</label>
-              <div className="flex gap-4 items-center mt-2">
+
+
+            {/* HOST */}
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <label className="font-semibold text-lg mb-2 block">Host</label>
+
+              <div className="grid grid-cols-4 gap-2">
                 {["web01", "web02", "cache01", "worker01", "db01"].map((hst) => (
-                  <FormControlLabel
+                  <Pill
                     key={hst}
-                    control={
-                      <Checkbox
-                        checked={hosts.includes(hst)}
-                        onChange={() =>
-                          handleCheckbox(hst, hosts, setHosts)
-                        }
-                      />
-                    }
                     label={hst}
+                    isActive={hosts.includes(hst)}
+                    onClick={() => handleCheckbox(hst, hosts, setHosts)}
                   />
                 ))}
               </div>
             </div>
 
-            <div>
-              <label className="font-semibold">Request ID:</label>
-              <TextField
-                fullWidth
-                label="Enter Request ID"
-                variant="outlined"
-                className="mt-1"
-                value={requestId}
-                onChange={(e) => setRequestId(e.target.value)}
-              />
-            </div>
 
-            {/* <div>
-              <label className="font-semibold">Timestamp:</label>
-              <TextField
-                fullWidth
-                label=">2025-11-17 10:00:00"
-                variant="outlined"
-                className="mt-1"
-                value={timeStamp}
-                onChange={(e) => setTimeStamp(e.target.value)}
-              />
-            </div> */}
+          {/* REQUEST ID */}
+          <div>
+            <label className="font-semibold text-lg mb-2 block">Request ID</label>
+            <TextField
+              fullWidth
+              label="Enter Request ID"
+              variant="outlined"
+              value={requestId}
+              onChange={(e) => setRequestId(e.target.value)}
+            />
+          </div>
 
-            {/* Date Range */}
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* DATE RANGE */}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div className="grid grid-cols-2 gap-6">
               <DateTimePicker
                 label="Start Time"
-                value={startTime}
                 ampm={false}
+                value={startTime}
+                slotProps={{
+                  textField: { fullWidth: true }
+                }}
                 onChange={(newValue) => setStartTime(newValue)}
               />
               <DateTimePicker
                 label="End Time"
                 ampm={false}
                 value={endTime}
+                slotProps={{
+                  textField: { fullWidth: true }
+                }}
                 onChange={(newValue) => setEndTime(newValue)}
               />
-            </LocalizationProvider>
-            <div className="flex justify-center">
-              <button className="bg-red-600 text-white px-5 py-2 rounded-md shadow" onClick={() => dispatch(setFilters(filter))}>
-                Search
-              </button>
             </div>
-          </FormGroup>
-        </div>
-      </Container>
-    </>
-  );
+          </LocalizationProvider>
+
+         <button
+  className="
+    px-8 py-3 rounded-lg 
+    bg-emerald-600 text-white font-semibold 
+    shadow-md hover:bg-emerald-700 
+    transition-all duration-300
+  "
+  onClick={() => dispatch(setFilters(filter))}
+>
+  Search
+</button>
+        </FormGroup>
+      </div>
+    </Container>
+  </>
+);
 }
