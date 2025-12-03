@@ -111,7 +111,7 @@ const Pill = ({ label, isActive, onClick }) => {
               <div className="p-3 bg-gray-50 rounded-lg">
                 <label className="font-semibold text-lg mb-2 block">Component</label>
 
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                   {["api-server", "database", "cache", "worker", "auth"].map((cmp) => (
                     <Pill
                       key={cmp}
@@ -129,7 +129,7 @@ const Pill = ({ label, isActive, onClick }) => {
             <div className="p-3 bg-gray-50 rounded-lg">
               <label className="font-semibold text-lg mb-2 block">Host</label>
 
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-5 gap-2">
                 {["web01", "web02", "cache01", "worker01", "db01"].map((hst) => (
                   <Pill
                     key={hst}

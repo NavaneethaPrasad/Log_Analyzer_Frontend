@@ -7,9 +7,9 @@ import { setLogs,setTotal } from "../logSlice";
 export default function DataTable() {
   const dispatch=useDispatch()
   const rows = useSelector((state)=>state?.logBag?.logs)
-  const total = useSelector(state => state.logBag.total);
-  const isFiltered = useSelector(state => state.logBag.isFiltered);
-  const storeFilters = useSelector((state) => state.logBag.filters);
+  const total = useSelector(state => state?.logBag?.total);
+  const isFiltered = useSelector(state => state?.logBag?.isFiltered);
+  const storeFilters = useSelector((state) => state?.logBag?.filters);
   const [page, setPage] = useState(0);
   
   const [pageSize, setPageSize] = useState(100);
@@ -86,7 +86,7 @@ export default function DataTable() {
       ]}
       sx={{
         borderRadius: "16px",
-        border: "1px solid #e5e7eb", 
+        border: "1px solid #b7b9beff", 
         backgroundColor: "white",
         boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
 
